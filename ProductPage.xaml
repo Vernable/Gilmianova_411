@@ -6,9 +6,74 @@
       xmlns:local="clr-namespace:Gilmianova_41"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProductPage">
+      Title="ProductPage" FontFamily="Tw Cen MT">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+           
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left">
+            <TextBlock Text="Поиск по наименованию" FontSize="15"></TextBlock>
+            <TextBox Name="TBoxSearch"
+                     TextChanged="TBoxSearch_TextChanged" FontFamily="Tw Cen MT"  Width="150" Height="30" Margin="0,5,0,0"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Center">
+            <RadioButton Content="По возрастанию стоимости" FontFamily="Tw Cen MT" GroupName="Sort" Checked="RButtonUp_Checked"  Name="RButtonUp" Width="300" FontSize="15"></RadioButton>
+            <RadioButton Content="По убыванию стоимости" FontFamily="Tw Cen MT" GroupName="Sort" Checked="RButtonDown_Checked"  Name="RButtonDown" Width="300" FontSize="15"></RadioButton>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+            <ComboBox Name="ComboDiscount" SelectionChanged="ComboDiscount_SelectionChanged" FontFamily="Tw Cen MT" FontSize="15" Height="30" Width="180">
+                <TextBlock> Все диапазоны </TextBlock>
+                <TextBlock>0-9,99%</TextBlock>
+                <TextBlock> 10-14,99%</TextBlock>
+                <TextBlock>15% и более</TextBlock>
+            </ComboBox>
+            <TextBlock Text="Вы авторизованы как " Margin="5" FontSize="15"></TextBlock>
+            <TextBlock Name="FIOTB" FontSize="15"></TextBlock>
+            <TextBlock Text="Роль " Margin="5" FontSize="15"></TextBlock>
+            <TextBlock Name="RoleTB" FontSize="15"></TextBlock>
+        </StackPanel>
+
+        <ListView Name="ProductListView" FontFamily="Tw Cen MT" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Image Width="200" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Center" Grid.RowSpan="4">
+                            <Image.Source>
+                                <Binding Path="ProductPhotoPath">
+                                    <Binding.TargetNullValue>
+                                        <ImageSource>
+                                            images/picture.png
+                                        </ImageSource>
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+                        <TextBlock Text="{Binding ProductName}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"  Margin="5,0,0,0"></TextBlock>
+                        <TextBlock Text="{Binding ProductDiscountAmount, StringFormat=Скидка {0}%}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" FontSize="20" Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding ProductDescription}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" FontSize="15" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding ProductImporter}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" FontSize="15" Margin="5,0,0,0"/>
+                        <TextBlock Text="{Binding ProductCost,StringFormat={}{0:0} рублей}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" FontSize="15" Margin="5,0,0,0"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

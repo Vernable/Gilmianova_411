@@ -35,8 +35,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +64,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Gilmianova_41.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Order.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderProduct.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PickUpPoint.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Role.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>Gilmianova_41.tt</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -62,6 +94,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Gilmianova_41.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gilmianova_41.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Gilmianova_41.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gilmianova_41.edmx</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -94,6 +136,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EntityDeploy Include="Gilmianova_41.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Gilmianova_41.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Gilmianova_41.edmx.diagram">
+      <DependentUpon>Gilmianova_41.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,10 +156,33 @@
     <Resource Include="images\picture.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="images\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Gilmianova_41.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Gilmianova_41.Context.cs</LastGenOutput>
+      <DependentUpon>Gilmianova_41.edmx</DependentUpon>
+    </Content>
+    <Content Include="Gilmianova_41.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Gilmianova_41.edmx</DependentUpon>
+      <LastGenOutput>Gilmianova_41.cs</LastGenOutput>
+    </Content>
+    <Resource Include="images\B320R5.jpg" />
+    <Resource Include="images\D329H3.jpg" />
+    <Resource Include="images\D572U8.jpg" />
+    <Resource Include="images\F572H7.jpg" />
+    <Resource Include="images\F635R4.jpg" />
+    <Resource Include="images\G432E4.jpg" />
+    <Resource Include="images\G783F5.jpg" />
+    <Resource Include="images\H782T5.jpg" />
+    <Resource Include="images\J384T6.jpg" />
+    <Resource Include="images\А112Т4.jpg" />
     <Resource Include="images\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\icon.ico" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
