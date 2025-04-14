@@ -13,8 +13,8 @@
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
         <Image Source="images/logo.png" HorizontalAlignment="Left"></Image>
-        <TextBlock Text="Gilmianova 41" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Center"></TextBlock>
-        <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" NavigationUIVisibility="Hidden"></Frame>
+        <TextBlock Text="Gilmianova 41" HorizontalAlignment="Center" FontSize="30" VerticalAlignment="Center" ></TextBlock>
+        <Frame Grid.Row="1" Name="MainFrame" ContentRendered="MainFrame_ContentRendered" Margin="0,5,5,0" NavigationUIVisibility="Hidden"></Frame>
         <Button Name="Back" Content="Назад" HorizontalAlignment="Right" Click="Button_Click" ></Button>
     </Grid>
 </Window>

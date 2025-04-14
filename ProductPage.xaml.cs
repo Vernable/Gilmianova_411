@@ -17,74 +17,199 @@ namespace Gilmianova_41
 {
     /// <summary>
     /// Логика взаимодействия для ProductPage.xaml
-    /// </summary>
+
     public partial class ProductPage : Page
     {
-        List<Product> TableList;
-        
-        public ProductPage()
+         User currentUser;
+        int newOrderID;
+        private User _user = null;
+
+        List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
+        List<Product> selectedProducts = new List<Product>();
+        public ProductPage(User user)
         {
             InitializeComponent();
+            //скрываем кнопку показа заказов
+            if (selectedProducts.Count == 0)
+                ViewOrderButton.Visibility = Visibility.Collapsed;
+
+            currentUser = user;
+
+            if (user != null)
+            {
+                NameTextBlock.Text = user.UserName + " " + user.UserSurname + " " + user.UserPatronymic;
+                switch (user.UserRole)
+                {
+                    case 1:
+                        RoleTextBlock.Text = "Клиент";
+                        break;
+                    case 2:
+                        RoleTextBlock.Text = "Менеджер";
+                        break;
+                    case 3:
+                        RoleTextBlock.Text = "Администратор";
+                        break;
+
+
+                }
+            }
+            else
+            {
+                NameTextBlock.Text = "гость";
+                RoleTextBlock.Text = " ";
+                Role.Visibility = Visibility.Collapsed;
+            }
+
             var currentProduct = Gilmianova_41Entities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProduct;
-            ComboDiscount.SelectedIndex = 0;
+
+
+            newOrderID = Gilmianova_41Entities.GetContext().Order.ToList().Select(p => p.OrderID).Max() + 1;
+
+            ComboFilter.SelectedIndex = 0;
+
+            int ProductMaxRecords = 0;
+            foreach (Product product in currentProduct)
+                ProductMaxRecords++;
+            TBProductCountMaxRecords.Text = ProductMaxRecords.ToString();
+
+            UpdateProducts();
         }
 
-        private void UpdateProduct()
+        private void UpdateProducts()
         {
             var currentProduct = Gilmianova_41Entities.GetContext().Product.ToList();
+
+            //фильтрация
+            if (ComboFilter.SelectedIndex == 0)
+            {
+                currentProduct = currentProduct.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 0)).ToList();
+            }
+            if (ComboFilter.SelectedIndex == 1)
+            {
+                currentProduct = currentProduct.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 0 && Convert.ToInt32(p.ProductDiscountAmount) <= 9.99)).ToList();
+            }
+            if (ComboFilter.SelectedIndex == 2)
+            {
+                currentProduct = currentProduct.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 10 && Convert.ToInt32(p.ProductDiscountAmount) <= 14.99)).ToList();
+            }
+            if (ComboFilter.SelectedIndex == 3)
+            {
+                currentProduct = currentProduct.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 15)).ToList();
+            }
             currentProduct = currentProduct.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
-            if (ComboDiscount.SelectedIndex == 1)
-            {
-                currentProduct = currentProduct.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 0 && Convert.ToDouble(p.ProductDiscountAmount) <= 9.99)).ToList();
-            }
-            if (ComboDiscount.SelectedIndex == 2)
-            {
-                currentProduct = currentProduct.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 10 && Convert.ToDouble(p.ProductDiscountAmount) <= 14.99)).ToList();
-            }
-            if (ComboDiscount.SelectedIndex == 3)
-            {
-                currentProduct = currentProduct.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 15)).ToList();
-            }
+            ProductListView.ItemsSource = currentProduct.ToList();
 
-
-            if (RButtonDown.IsChecked == true)
+            //сортировка
+            if (RButtonDown.IsChecked.Value)
             {
-                currentProduct = currentProduct.OrderByDescending(p => p.ProductCost).ToList();
+                ProductListView.ItemsSource = currentProduct.OrderByDescending(p => p.ProductCost).ToList();
             }
-            else if (RButtonUp.IsChecked == true)
+            if (RButtonUp.IsChecked.Value)
             {
-                currentProduct = currentProduct.OrderBy(p => p.ProductCost).ToList();
+                ProductListView.ItemsSource = currentProduct.OrderBy(p => p.ProductCost).ToList();
             }
 
+            int ProductcountRecords = 0;
+            foreach (Product product in currentProduct)
+                ProductcountRecords++;
+            TBProductCountRecords.Text = ProductcountRecords.ToString();
 
-            ProductListView.ItemsSource = currentProduct;
-
-            TableList = currentProduct;
-            
+            if (selectedProducts.Count == 0)
+            {
+                ViewOrderButton.Visibility = Visibility.Hidden;
+            }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
 
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateProduct();
+            UpdateProducts();
         }
 
-        private void ComboDiscount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateProduct();
+            UpdateProducts();
+        }
+
+        private void ComboFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateProducts();
         }
 
         private void RButtonUp_Checked(object sender, RoutedEventArgs e)
         {
-            UpdateProduct();
+            UpdateProducts();
         }
 
         private void RButtonDown_Checked(object sender, RoutedEventArgs e)
         {
-            UpdateProduct();
+            UpdateProducts();
+        }
+
+        int newOrderId;
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProductListView.SelectedIndex >= 0)
+            {
+                List<Order> allOrder = Gilmianova_41Entities.GetContext().Order.ToList();
+                List<int> allOrderId = new List<int>();
+                foreach (var p in allOrder.Select(x => $"{x.OrderID}").ToList())
+                {
+                    allOrderId.Add(Convert.ToInt32(p));
+                }
+
+                newOrderId = allOrderId.Max() + 1;
+                var prod = ProductListView.SelectedItem as Product;
+
+                //int newOrderID = selectedOrderProducts.Last().Order.OrderID;
+                var newOrderProd = new OrderProduct();
+                newOrderProd.OrderID = newOrderId;
+
+                newOrderProd.ProductArticleNumber = prod.ProductArticleNumber;
+                newOrderProd.ProductCount = 1;
+                var selOP = selectedOrderProducts.Where(p => Equals(p.ProductArticleNumber, prod.ProductArticleNumber));
+
+                if (selOP.Count() == 0)
+                {
+                    selectedOrderProducts.Add(newOrderProd);
+                    selectedProducts.Add(prod);
+                }
+                else
+                {
+                    foreach (OrderProduct p in selectedOrderProducts)
+                    {
+                        if (p.ProductArticleNumber == prod.ProductArticleNumber)
+                            p.ProductCount++;
+                    }
+                }
+
+                ViewOrderButton.Visibility = Visibility.Visible;
+                ProductListView.SelectedIndex = -1;
+
+                UpdateProducts();
+
+            }
+        }
+
+
+        private void ViewOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            //selectedProducts = selectedProducts.Distinct().ToList();
+            ViewOrderWindow orderWindow = new ViewOrderWindow(selectedOrderProducts, selectedProducts, currentUser);
+            orderWindow.ShowDialog();
+            UpdateProducts();
+        }
+
+        private void ProductListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateProducts();
         }
     }
-   
 }
+
